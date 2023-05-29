@@ -1,0 +1,124 @@
+---
+title: "RNAseq_project"
+output:
+  html_document:
+    df_print: paged
+---
+
+#Búsqueda de proyecto
+
+En la página de recount3 encontramos el proyecto SRP107565, viene del artículo titulado "Multiomics Profiling Establishes the Polypharmacology of FDA-Approved CDK4/6 Inhibitors and the Potential for Differential Clinical Activity".
+
+El dataset tiene el objetivo de hacer una comparación de tres inhibidores de CDK4/6 para cáncer de mama en etapas avanzadas. Para esto se hace un perfil transcripcional entre siete líneas celulares de cáncer de mama después de 6 y 24 horas de  exposición a concentraciones de 0.3 a 3.0 micromolares. 
+
+```{r, echo=TRUE}
+## Cambiar el URL de recount3 a Amazon (AWS)
+
+## Load recount3 R package
+library("recount3")
+
+getOption(
+  "recount3_url",
+  "http://duffel.rail.bio/recount3"
+)
+
+options(recount3_url = "https://recount-opendata.s3.amazonaws.com/recount3/release")
+
+## Confirmando que se cambió el URL
+getOption(
+  "recount3_url",
+  "http://duffel.rail.bio/recount3"
+)
+
+## Vemos los proyectos disponibles de humano y alzheimer
+human_projects <- available_projects(organism = "human")
+
+
+## Encontramos proyecto SRP060205
+project_info <- subset(
+  human_projects,
+  project == "SRP107565"
+)
+
+## Cremos un objeto de tipo RangedSummarizedExperiment (RSE)
+## con la información a nivel de genes
+
+rse_gene_SRP107565 <- create_rse(project_info)
+
+## Visualizamos el objeto
+rse_gene_SRP107565
+## vemos dimensiones de 63856 (genes)  x 216 (muestras)
+
+```
+
+# Formateando y visualizando los datos del experimento SRP107565
+```{r}
+## Convirtamos las cuentas por nucleotido a cuentas por lectura
+## usando compute_read_counts().
+assay(rse_gene_SRP107565, "counts") <- compute_read_counts(rse_gene_SRP107565)
+
+## Utilizamos la matrix de cuentas del summarized experiment
+count_matrix <- assay(rse_gene_SRP107565, "counts")
+
+## Extraemos datos de las muestras
+rse_gene_SRP107565 <- expand_sra_attributes(rse_gene_SRP107565)
+rse_attribute_data <- colData(rse_gene_SRP107565)[
+    ,
+    grepl("^sra_attribute", colnames(colData(rse_gene_SRP107565)))
+]
+## Sacamos datos de abemaciclib a 3 micromolar por 24 hrs en MCF7
+
+```
+
+```{r}
+## Hacemos el objeto 
+library("edgeR")
+dge <- DGEList(
+  counts = count_matrix,
+  genes = rowData(rse_gene_SRP107565)
+)
+
+dge <- calcNormFactors(dge)
+## Quitamos los genes que solo están muy poco expresados
+cutoff <- 1
+drop <- which(apply(cpm(dge), 1, max) < cutoff)
+d <- dge[-drop,]
+
+## Utilizando muestras solamente tratadas con palbociclib y control
+samples <- rse_attribute_data[, 1] == "Palbociclib" | rse_attribute_data[, 1] == "Control" 
+rse_attribute_data <- rse_attribute_data[samples,]
+samples <- rse_attribute_data[, 5] == "24 hr"
+rse_attribute_data <- rse_attribute_data[samples,]
+d <- d[,samples]
+
+## Para colores
+library("RColorBrewer")
+
+## Convirtiendo los grupos de tratamiento
+agent <- rse_attribute_data[,1]
+col.group <- factor(agent)
+levels(col.group) <- c("deepskyblue", "firebrick1")
+col.group <- as.character(col.group)
+
+
+plotMDS(d, labels = agent, col = col.group)
+
+```
+# PCA
+```{r}
+library(factoextra)
+library(FactoMineR)
+
+pca.raw.d <- log2(d$counts+0.5)
+pca.d <- PCA(t(pca.raw.d), graph = F)
+fviz_pca_ind(pca.d, col.ind = agent)
+
+```
+# DEA
+```{r}
+library(pheatmap)
+
+mm <- model.matrix(~ 0 + agent)
+pheatmap(mm, cluster_rows = FALSE, cluster_cols = FALSE)
+```
+
