@@ -24,7 +24,7 @@ dge_prueba <- DGEList(
   genes = rowData(rse_prueba)
 )
 # Normalizamos datos
-dge_prueba <- calcNormFactors(dge)
+dge_prueba <- calcNormFactors(dge_prueba)
 # Quitamos los genes que solo están muy poco expresados
 cutoff <- 1
 drop <- which(apply(cpm(dge_prueba), 1, max) < cutoff)
