@@ -1,5 +1,32 @@
-# hacer el objeto
+# Cargamos la librería recount
+library("recount3")
+# Obtenemos el link de la base de datos
+getOption(
+  "recount3_url",
+  "http://duffel.rail.bio/recount3"
+)
+# Cambiamos el url
+options(recount3_url = "https://recount-opendata.s3.amazonaws.com/recount3/release")
+# Confirmando que se cambió el URL
+getOption(
+  "recount3_url",
+  "http://duffel.rail.bio/recount3"
+)
+# Gradamos los proyectos disponibles de humano
+human_projects <- available_projects(organism = "human")
+# Encontramos proyecto SRP107565 perteneciente al artículo
+# "Multiomics Profiling Establishes the Polypharmacology of FDA-Approved CDK4/6 Inhibitors and the Potential for Differential Clinical Activity"
+project_info <- subset(
+  human_projects,
+  project == "SRP107565"
+)
+
+# Cremos un objeto de tipo RangedSummarizedExperiment (RSE)
+# con la información a nivel de genes
 rse_prueba <- create_rse(project_info)
+dim(rse_prueba)
+## vemos dimensiones de 63856 (genes)  x 216 (muestras)
+# hacer el objeto
 # Sacamos las counts
 assay(rse_prueba, "counts") <- compute_read_counts(rse_prueba)
 prueba_matrix <- assay(rse_prueba, "counts")
