@@ -1,0 +1,14 @@
+Column1,Column2,Column3,Column4,Column5,Column6,Column7,Column8,Column9,Column10,Column11
+,sra_attribute.agent,sra_attribute.cell_line,sra_attribute.dose,sra_attribute.source_name,sra_attribute.time,sra_attribute.agent.1,sra_attribute.cell_line.1,sra_attribute.dose.1,sra_attribute.source_name.1,sra_attribute.time.1
+SRR5579531,Control,MCF7,0 uM,MCF7 breast cancer cell line,24 hr,Control,MCF7,0 uM,MCF7 breast cancer cell line,24 hr
+SRR5579532,Abemaciclib,MCF7,0.3 uM,MCF7 breast cancer cell line,24 hr,Abemaciclib,MCF7,0.3 uM,MCF7 breast cancer cell line,24 hr
+SRR5579533,Abemaciclib,MCF7,1 uM,MCF7 breast cancer cell line,24 hr,Abemaciclib,MCF7,1 uM,MCF7 breast cancer cell line,24 hr
+SRR5579534,Abemaciclib,MCF7,3 uM,MCF7 breast cancer cell line,24 hr,Abemaciclib,MCF7,3 uM,MCF7 breast cancer cell line,24 hr
+SRR5579535,Palbociclib,MCF7,0.3 uM,MCF7 breast cancer cell line,24 hr,Palbociclib,MCF7,0.3 uM,MCF7 breast cancer cell line,24 hr
+SRR5579536,Palbociclib,MCF7,3 uM,MCF7 breast cancer cell line,24 hr,Palbociclib,MCF7,3 uM,MCF7 breast cancer cell line,24 hr
+SRR5579537,Ribociclib,MCF7,0.3 uM,MCF7 breast cancer cell line,24 hr,Ribociclib,MCF7,0.3 uM,MCF7 breast cancer cell line,24 hr
+SRR5579538,Ribociclib,MCF7,3 uM,MCF7 breast cancer cell line,24 hr,Ribociclib,MCF7,3 uM,MCF7 breast cancer cell line,24 hr
+SRR5579539,Control,MCF7,0 uM,MCF7 breast cancer cell line,24 hr,Control,MCF7,0 uM,MCF7 breast cancer cell line,24 hr
+SRR5579540,Abemaciclib,MCF7,0.3 uM,MCF7 breast cancer cell line,24 hr,Abemaciclib,MCF7,0.3 uM,MCF7 breast cancer cell line,24 hr
+SRR5579541,Abemaciclib,MCF7,1 uM,MCF7 breast cancer cell line,24 hr,Abemaciclib,MCF7,1 uM,MCF7 breast cancer cell line,24 hr
+SRR5579542,Abemaciclib,MCF7,3 uM,MCF7 breast cancer cell line,24 hr,Abemaciclib,MCF7,3 uM,MCF7 breast cancer cell line,24 hr
