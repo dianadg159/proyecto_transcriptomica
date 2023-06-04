@@ -124,14 +124,14 @@ df_heatmap <- as.data.frame(rse_prueba_data_MCF7_24hr[,-4])
 colnames(df_heatmap) <- c("Agent", "Cell line", "Dose (uM)", "Time (hr)")
 # Extraer los nombres de los genes
 gnames <- rownames(heatmap)
-rownames(heatmap) <- rowRanges(rse_prueba)$gene_name[
-  match(rownames(heatmap), rowRanges(rse_prueba)$gene_id)
+rownames(heatmap) <- de_results$gene_name[
+  match(rownames(heatmap), rownames(de_results))
 ]
 
 ## Heatmap
 library("pheatmap")
 pheatmap(
-  heatmap,
+  heatmap2,
   cluster_rows = TRUE,
   cluster_cols = TRUE,
   show_rownames = TRUE,
